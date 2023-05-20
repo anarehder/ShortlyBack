@@ -53,3 +53,13 @@ export async function openLink(req,res){
         res.status(500).send(err.message);
     }
 }
+
+export async function deleteLink(req,res){
+    const { id } = req.params;
+    try{
+        await db.query(`DELETE FROM shortlinks WHERE id = $1`, [id])
+        res.status(204).send("funcionou");
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+}
