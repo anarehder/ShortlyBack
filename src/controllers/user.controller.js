@@ -1,4 +1,4 @@
-import { db } from "../database/database.connection.js"
+import { db } from "../database/database.connection.js";
 import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
 
@@ -14,7 +14,7 @@ export async function signup(req, res) {
             , [name, email, hash]
         );
 
-        res.status(201).send("Funcionou");
+        res.status(201);
 
     } catch (err) {
         res.status(500).send(err.message);
@@ -27,7 +27,7 @@ export async function signin(req,res){
         const token = uuid();
         const response = {token};
         const userId = parseInt(res.locals.user.id);
-        console.log(userId);
+
         await db.query(
             `INSERT INTO sessions ("userId", token) VALUES ($1, $2);`
             , [userId, token]
