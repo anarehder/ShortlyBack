@@ -3,10 +3,9 @@ import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
 
 export async function signup(req, res) {
-    const { name, email, password } = req.body
+    const { name, email, password } = req.body;
 
     try {
-        console.log(req.body);
         const hash = bcrypt.hashSync(password, 10);
 
         await db.query(
