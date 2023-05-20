@@ -17,3 +17,21 @@ export async function createShortLink(req, res) {
         res.status(500).send(err.message);
     }
 }
+
+export async function getLink(req,res){
+    const { id } = req.params
+    try{
+        const response  = await db.query(
+            `SELECT * FROM shortlinks WHERE id = $1`,[id]
+        );
+        if (response.rowCount === 0) return res.status(404).send("Url não encontrada");
+        const formatedResponse = {
+            "id": response.rows[0].id,
+            "shortUrl": response.rows[0].shortUrl,
+            "url": response.rows[0].url
+        }
+        res.status(200).send(formatedResponse);
+    } catch (err){
+        res.status(500).send(err.message); 
+    }
+}
