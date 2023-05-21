@@ -14,7 +14,6 @@ export async function validateEmailAvailable(req, res, next) {
 
 export async function validatePassword(req, res, next) {
     const { password, confirmPassword } = req.body;
-
     if (password !== confirmPassword) return res.status(422).send({ message: "As senhas não coincidem" });
     next();
 }
