@@ -37,3 +37,28 @@ export async function signin(req,res){
         res.status(500).send(err.message);
     }
 }
+
+export async function getMyLinks(req,res){
+    try{
+        const userId = res.locals.session;
+        const { rows: userData } = await db.query(
+            `SELECT SUM(shortlinks."visitCount") AS "visitCount", users.id, users.name
+            FROM shortlinks
+            JOIN users ON shortlinks."userId" = users.id
+            WHERE users.id = $1
+            GROUP BY users.id;`,
+            [userId]
+        );
+        const { rows: links } = await db.query(
+            `SELECT id, url, "shortUrl", "visitCount" FROM shortlinks WHERE "userId" = $1;`
+            , [userId]
+        );
+        const response = {
+           ...userData[0],
+           "shortenedUrls": [...links]
+        }
+        res.status(200).send(response);
+    } catch (err){
+        res.status(500).send(err.message);
+    }
+}
